@@ -15,3 +15,5 @@ include(../appbase.pri)
 
 HEADERS += applicationhelper.h
 SOURCES += applicationhelper.cpp
+HEADERS += uservalidator.h
+SOURCES += uservalidator.cpp

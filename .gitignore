@@ -12,6 +12,7 @@ tools/tspawn/defaults/
 src/test/sharedmemorylogstream/log/
 Gemfile.lock
 build/
+tmp/
 # 3rdparty/**/*.cmake
 3rdparty/**/*.pc
 **/CMakeCache.txt

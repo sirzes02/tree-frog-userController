@@ -108,6 +108,14 @@ Users Users::get(int id, int lockRevision)
     return Users(mapper.findFirst(cri));
 }
 
+Users Users::getByEmail(QString &email)
+{
+    TSqlORMapper<UsersObject> mapper;
+    TCriteria cri;
+    cri.add(UsersObject::Email, email);
+    return Users(mapper.findFirst(cri));
+}
+
 int Users::count()
 {
     TSqlORMapper<UsersObject> mapper;

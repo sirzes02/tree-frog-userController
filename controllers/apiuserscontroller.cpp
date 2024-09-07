@@ -1,66 +1,70 @@
 #include "apiuserscontroller.h"
 #include "apiusersservice.h"
+#include "uservalidator.h"
 
 static ApiUsersService service;
 
 void ApiUsersController::index()
 {
-    QJsonObject json = service.index();
-    renderJson(json);
+    renderJson(service.index());
 }
 
 void ApiUsersController::get(const QString &id)
 {
-    QJsonObject json = service.get(id.toInt());
-    renderJson(json);
+    renderJson(service.get(id.toInt()));
 }
 
 void ApiUsersController::create()
 {
-    QJsonObject json;
+    QJsonObject jsonResponse;
 
-    switch (request().method())
+    if (request().method() == Tf::Post)
     {
-    case Tf::Post:
-        json = service.create(request());
-        break;
-    default:
-        setStatusCode(Tf::BadRequest);
-        break;
+        QVariantMap user = request().jsonData().toVariant().toMap();
+        UserValidator userValidator;
+
+        if (!userValidator.validate(user))
+        {
+            jsonResponse.insert("error", QJsonArray::fromStringList(userValidator.errorMessages()));
+            setStatusCode(Tf::BadRequest);
+        }
+        else
+        {
+            jsonResponse = service.create(request());
+        }
     }
-    renderJson(json);
+    else
+    {
+        setStatusCode(Tf::BadRequest);
+    }
+
+    renderJson(jsonResponse);
 }
 
 void ApiUsersController::save(const QString &id)
 {
-    QJsonObject json;
-
-    switch (request().method())
+    if (request().method() == Tf::Patch)
     {
-    case Tf::Post:
-        json = service.save(request(), id.toInt());
-        break;
-    default:
-        setStatusCode(Tf::BadRequest);
-        break;
+        renderJson(service.save(request(), id.toInt()));
     }
-    renderJson(json);
+    else
+    {
+        setStatusCode(Tf::BadRequest);
+        renderJson(QJsonObject());
+    }
 }
 
 void ApiUsersController::remove(const QString &id)
 {
-    QJsonObject json;
-
-    switch (request().method())
+    if (request().method() == Tf::Delete)
     {
-    case Tf::Post:
-        json = service.remove(id.toInt());
-        break;
-    default:
-        setStatusCode(Tf::BadRequest);
-        return;
+        renderJson(service.remove(id.toInt()));
     }
-    renderJson(json);
+    else
+    {
+        setStatusCode(Tf::BadRequest);
+        renderJson(QJsonObject());
+    }
 }
 
 // Don't remove below this line

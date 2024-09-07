@@ -12,8 +12,18 @@ QJsonObject ApiUsersService::index()
 
 QJsonObject ApiUsersService::get(int id)
 {
-    Users users = Users::get(id);
-    QJsonObject json = {{"data", users.toJsonObject()}};
+    Users user = Users::get(id);
+    QJsonObject json;
+
+    if (user.isNull())
+    {
+        json.insert("error", QJsonObject({{"message", "Not found"}}));
+        return json;
+    }
+    else
+    {
+        json.insert("data", user.toJsonObject());
+    }
 
     return json;
 }
@@ -21,12 +31,13 @@ QJsonObject ApiUsersService::get(int id)
 QJsonObject ApiUsersService::create(THttpRequest &request)
 {
     QJsonObject json;
-    QVariantMap users = request.jsonData().toVariant().toMap();
-    Users model = Users::create(users);
+    QVariantMap user = request.jsonData().toVariant().toMap();
+
+    Users model = Users::create(user);
 
     if (model.isNull())
     {
-        json.insert("error", QJsonObject({{"message", "Internal Server Error"}}));
+        json.insert("error", QJsonObject({{"message", "User already exists"}}));
     }
     else
     {

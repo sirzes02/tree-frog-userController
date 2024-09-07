@@ -37,6 +37,7 @@ public:
     static Users create(const QVariantMap &values);
     static Users get(int id);
     static Users get(int id, int lockRevision);
+    static Users getByEmail(QString &email);
     static int count();
     static QList<Users> getAll();
     static QJsonArray getAllJson(const QStringList &properties = QStringList());
