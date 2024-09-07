@@ -12,3 +12,8 @@ MOC_DIR = .obj/
 OBJECTS_DIR = .obj/
 
 include(../appbase.pri)
+HEADERS += sqlobjects/usersobject.h
+HEADERS += objects/users.h
+SOURCES += objects/users.cpp
+HEADERS += apiusersservice.h
+SOURCES += apiusersservice.cpp
