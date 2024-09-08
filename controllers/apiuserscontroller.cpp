@@ -1,21 +1,25 @@
 #include "apiuserscontroller.h"
 #include "apiusersservice.h"
 #include "uservalidator.h"
+#include "loggingvalues.h"
 
 static ApiUsersService service;
 
 void ApiUsersController::index()
 {
+    LOG_FUNC_NAME;
     renderJson(service.index());
 }
 
 void ApiUsersController::get(const QString &id)
 {
+    LOG_FUNC_NAME;
     renderJson(service.get(id.toInt()));
 }
 
 void ApiUsersController::create()
 {
+    LOG_FUNC_NAME;
     QJsonObject jsonResponse;
 
     if (request().method() == Tf::Post)
@@ -43,6 +47,7 @@ void ApiUsersController::create()
 
 void ApiUsersController::save(const QString &id)
 {
+    LOG_FUNC_NAME;
     if (request().method() == Tf::Patch)
     {
         renderJson(service.save(request(), id.toInt()));
@@ -56,6 +61,7 @@ void ApiUsersController::save(const QString &id)
 
 void ApiUsersController::remove(const QString &id)
 {
+    LOG_FUNC_NAME;
     if (request().method() == Tf::Delete)
     {
         renderJson(service.remove(id.toInt()));
